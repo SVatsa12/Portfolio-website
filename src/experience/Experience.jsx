@@ -1,6 +1,6 @@
 "use client";
 import { useFrame } from "@react-three/fiber";
-import { useRef, useMemo } from "react";
+import { useRef } from "react";
 import useScroll from "../hooks/useScroll";
 
 import HeroScene from "../scenes/HeroScene";
@@ -10,10 +10,14 @@ import ProjectsScene from "../scenes/ProjectsScene";
 // Particles that each move independently across the full scene height
 function DynamicParticles({ count = 1200 }) {
   const attrRef = useRef();
+  const positionsRef = useRef(new Float32Array(count * 3));
+  const velocitiesRef = useRef(new Float32Array(count * 3));
+  const initializedRef = useRef(false);
 
-  const { positions, velocities } = useMemo(() => {
-    const positions  = new Float32Array(count * 3);
-    const velocities = new Float32Array(count * 3);
+  // Initialize particles only once, client-side, after hydration
+  if (!initializedRef.current) {
+    const positions = positionsRef.current;
+    const velocities = velocitiesRef.current;
     for (let i = 0; i < count; i++) {
       positions[i * 3]     = (Math.random() - 0.5) * 40;   // x spread
       positions[i * 3 + 1] = Math.random() * -46;           // y: full scene depth
@@ -23,8 +27,11 @@ function DynamicParticles({ count = 1200 }) {
       velocities[i * 3 + 1] = Math.random() * 0.007 + 0.001; // upward float
       velocities[i * 3 + 2] = (Math.random() - 0.5) * 0.005; // slow z drift
     }
-    return { positions, velocities };
-  }, [count]);
+    initializedRef.current = true;
+  }
+
+  const positions = positionsRef.current;
+  const velocities = velocitiesRef.current;
 
   useFrame(() => {
     const attr = attrRef.current;
@@ -66,7 +73,20 @@ export default function Experience() {
   const scroll = useScroll();
 
   useFrame(({ camera }) => {
+    // Y scroll: navigate through sections (0 → -40)
     camera.position.y += (0 - scroll * 40 - camera.position.y) * 0.08;
+
+    // Z zoom: breathing parallax effect
+    // scroll 0→1 creates: 3 → 5.5 → 3 (zoom in at edges, out at middle)
+    const zoomPhase = Math.sin(scroll * Math.PI * 2) * 0.5 + 0.5; // 0 to 1 sinusoidal
+    const targetZ = 3.2 + zoomPhase * 2.3; // 3.2 (zoomed) to 5.5 (out)
+    camera.position.z += (targetZ - camera.position.z) * 0.06;
+
+    // FOV: dramatic effect paired with Z
+    // scroll 0→1 creates: 50 → 75 → 50 (wide at middle, tight at edges)
+    const targetFOV = 50 + zoomPhase * 25;
+    camera.fov += (targetFOV - camera.fov) * 0.05;
+    camera.updateProjectionMatrix();
   });
 
   return (

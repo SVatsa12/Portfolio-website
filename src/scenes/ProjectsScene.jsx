@@ -230,7 +230,7 @@ export default function ProjectsScene() {
   ];
 
   return (
-    <group ref={sceneRef}>
+    <group ref={sceneRef} position={[0, -40, 0]}>
       {/* Lighting */}
       <ambientLight intensity={0.2} />
       <pointLight position={[0, 4, 4]}    intensity={1.2} color="#c4b5fd" />

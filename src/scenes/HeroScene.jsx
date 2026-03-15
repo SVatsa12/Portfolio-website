@@ -1,7 +1,7 @@
 // HeroScene.jsx
 "use client";
 
-import { Text, MeshDistortMaterial, Stars, OrbitControls, Float } from "@react-three/drei";
+import { Text, MeshDistortMaterial, Stars } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef, useMemo } from "react";
 import * as THREE from "three";
@@ -256,15 +256,6 @@ export default function HeroScene() {
         <GridFloor />
 
       </group>
-
-      <OrbitControls
-        enableZoom={false}
-        enablePan={false}
-        maxPolarAngle={Math.PI / 1.9}
-        minPolarAngle={Math.PI / 3.5}
-        autoRotate
-        autoRotateSpeed={0.35}
-      />
     </>
   );
 }
