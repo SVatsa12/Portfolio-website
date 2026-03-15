@@ -2,3 +2,83 @@ body {
   margin: 0;
   background: black;
 }
+
+.scroll-wheel {
+  position: fixed;
+  right: 28px;
+  bottom: 24px;
+  z-index: 40;
+  width: 66px;
+  height: 90px;
+  border: 1px solid rgba(167, 139, 250, 0.5);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(30, 27, 75, 0.72), rgba(15, 23, 42, 0.78));
+  box-shadow: 0 0 24px rgba(109, 40, 217, 0.28);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.scroll-wheel:hover {
+  transform: translateY(-2px);
+  border-color: rgba(196, 181, 253, 0.8);
+  box-shadow: 0 0 32px rgba(124, 58, 237, 0.4);
+}
+
+.scroll-wheel:active {
+  transform: translateY(0);
+}
+
+.scroll-wheel-track {
+  width: 22px;
+  height: 36px;
+  border: 1px solid rgba(196, 181, 253, 0.75);
+  border-radius: 99px;
+  display: flex;
+  justify-content: center;
+  padding-top: 5px;
+}
+
+.scroll-wheel-dot {
+  width: 4px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(196, 181, 253, 0.95);
+  box-shadow: 0 0 10px rgba(167, 139, 250, 0.8);
+  animation: scrollWheelPulse 1.2s ease-in-out infinite;
+}
+
+.scroll-wheel-text {
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  color: rgba(196, 181, 253, 0.85);
+  font-family: "Courier New", monospace;
+}
+
+@keyframes scrollWheelPulse {
+  0% {
+    opacity: 0.2;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 0.2;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .scroll-wheel {
+    right: 16px;
+    bottom: 16px;
+    width: 58px;
+    height: 82px;
+  }
+}
