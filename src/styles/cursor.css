@@ -1,0 +1,38 @@
+.cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  backdrop-filter: blur(1px);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.18),
+    0 0 18px rgba(255, 255, 255, 0.42);
+  z-index: 10001;
+}
+
+.cursor-trail {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10000;
+}
+
+body {
+  cursor: none;
+}
+
+@media (pointer: coarse) {
+  .cursor,
+  .cursor-trail {
+    display: none;
+  }
+
+  body {
+    cursor: auto;
+  }
+}
